@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <header>
+        <h1>Random country details generator</h1>
+        <button onclick="getData()">Generate</button>
+    </header>
+    <section>
+        <input type="text" value="" placeholder="Enter country" id="inpu">
+        <button onclick="searchbtn()">Search</button>
+    </section>
+
+    <div class="container" id="cont">
+       
+    </div>
+</body>
+<script>
+    const getData=async()=>{
+        const serverResponce=await fetch('https://restcountries.com/v3.1/all')
+        const datas=await serverResponce.json()
+        let floorNumber=(Math.random()*datas.length)
+        let randomNumber=Math.floor(floorNumber)
+        let data=datas[randomNumber]
+        console.log(data.currencies)
+        console.log(Object.keys(data.currencies))
+        console.log( data.currencies[Object.keys(data.currencies)])
+        cont.innerHTML=`
+         <div class="heading-container">
+            <h2>${data.name.common}</h2>
+            <h5>${data.capital}</h5>
+        </div>
+        <div class="container-row">
+            <div>
+                <img src="${data.flags.png}" alt="image-flag">
+                <a href="${data.maps.googleMaps}">Google map link</a>
+            </div>
+            <div>
+                <h2>${ data.currencies[Object.keys(data.currencies)].name}</h2>
+                <h2>Region=${data.region}</h2>
+                <h2>Population=${data.population}</h2>
+            </div>
+        </div>
+        `
+
+   }
+
+   const searchbtn=async()=>{
+    const values= inpu.value
+    console.log(values)
+    const serverResponce=await fetch(`https://restcountries.com/v3.1/name/${values}`)
+    const data=await serverResponce.json()
+   console.log(data)
+   
+    data.map((data)=>{
+        cont.innerHTML=`
+         <div class="heading-container">
+            <h2>${data.name.common}</h2>
+            <h5>${data.capital}</h5>
+        </div>
+        <div class="container-row">
+            <div>
+                <img src="${data.flags.png}" alt="image-flag">
+                <a href="${data.maps.googleMaps}">Google map link</a>
+            </div>
+            <div>
+                <h2>${ data.currencies[Object.keys(data.currencies)].name}</h2>
+                <h2>Region=${data.region}</h2>
+                <h2>Population=${data.population}</h2>
+            </div>
+        </div>
+        `
+    })
+
+   
+   
+   }
+
+
+    
+</script>
+</html>
